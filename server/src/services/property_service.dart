@@ -17,6 +17,7 @@ class PropertyService {
 
   Future<bool> updateProperty(String id, Map<String, dynamic> payload) async {
     RequestValidator.validatePropertyPayload(payload);
+    RequestValidator.validatePathAndPayloadId(id, payload);
     return _repository.update(id, payload);
   }
 

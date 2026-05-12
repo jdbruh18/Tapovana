@@ -52,12 +52,30 @@ class AppRouter {
         return;
       }
       if (path.startsWith('/properties/') && request.method == 'PUT') {
-        final id = path.split('/').last;
+        final id = _extractResourceId(path);
+        if (id == null) {
+          await JsonResponse.error(
+            request,
+            status: HttpStatus.badRequest,
+            code: 'invalid_property_id',
+            message: 'Property id is missing from request path',
+          );
+          return;
+        }
         await _propertyHandler.update(request, id);
         return;
       }
       if (path.startsWith('/properties/') && request.method == 'DELETE') {
-        final id = path.split('/').last;
+        final id = _extractResourceId(path);
+        if (id == null) {
+          await JsonResponse.error(
+            request,
+            status: HttpStatus.badRequest,
+            code: 'invalid_property_id',
+            message: 'Property id is missing from request path',
+          );
+          return;
+        }
         await _propertyHandler.delete(request, id);
         return;
       }
@@ -95,5 +113,14 @@ class AppRouter {
       ..add('Access-Control-Allow-Origin', '*')
       ..add('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
       ..add('Access-Control-Allow-Headers', 'Content-Type');
+  }
+
+  String? _extractResourceId(String path) {
+    final segments = Uri.parse(path).pathSegments;
+    if (segments.length < 2) {
+      return null;
+    }
+    final id = segments.last;
+    return id.isEmpty ? null : id;
   }
 }

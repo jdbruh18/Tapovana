@@ -20,6 +20,7 @@ class ProxyResult {
 
 class ProxyService {
   static const Set<String> allowedProxyHosts = {'flutter.github.io', 'github.io'};
+  static const int _maxProxyBytes = 5 * 1024 * 1024;
 
   Future<ProxyResult> fetchImage(String rawUrl) async {
     final uri = Uri.tryParse(rawUrl);
@@ -47,7 +48,16 @@ class ProxyService {
       }
 
       final bytesBuilder = BytesBuilder(copy: false);
+      var totalBytes = 0;
       await for (final chunk in externalResponse) {
+        totalBytes += chunk.length;
+        if (totalBytes > _maxProxyBytes) {
+          return ProxyResult(
+            statusCode: HttpStatus.payloadTooLarge,
+            errorCode: 'proxy_payload_too_large',
+            message: 'Proxied image exceeds allowed size limit',
+          );
+        }
         bytesBuilder.add(chunk);
       }
       final bytes = bytesBuilder.toBytes();

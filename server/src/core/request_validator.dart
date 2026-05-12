@@ -57,5 +57,28 @@ class RequestValidator {
         statusCode: HttpStatus.unprocessableEntity,
       );
     }
+
+    if (payload['id'] is! String ||
+        payload['name'] is! String ||
+        payload['imageAsset'] is! String ||
+        payload['rating'] is! num ||
+        payload['distanceKm'] is! num ||
+        payload['verified'] is! bool) {
+      throw RequestValidationException(
+        'invalid_field_types',
+        'One or more property fields have an invalid type',
+        statusCode: HttpStatus.unprocessableEntity,
+      );
+    }
+  }
+
+  static void validatePathAndPayloadId(String pathId, Map<String, dynamic> payload) {
+    if (payload['id'] != pathId) {
+      throw RequestValidationException(
+        'id_mismatch',
+        'Property id in path must match payload id',
+        statusCode: HttpStatus.unprocessableEntity,
+      );
+    }
   }
 }
