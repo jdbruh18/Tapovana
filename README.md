@@ -70,11 +70,14 @@ _Last updated: 2026-05-12_
 
 ```
 Tapovana/
-├── lib/                # Main Flutter app
-│   └── main.dart      # Single-file MVP implementation
+├── lib/                # Flutter app modules
+│   ├── main.dart      # Entry point
+│   ├── app.dart       # App bootstrap/theme
+│   ├── core/          # Shared config/network/errors
+│   └── features/      # Search, booking, auth, notifications
 ├── server/             # Backend server
-│   ├── server.dart    # Dart HTTP server
-│   └── data/          # Properties database
+│   ├── server.dart    # Server entrypoint
+│   └── src/           # Router, handlers, services, repositories
 ├── host_portal/       # Host portal (future feature)
 ├── pubspec.yaml       # Flutter dependencies
 └── README.md          # This file
@@ -90,6 +93,20 @@ flutter run --dart-define=API_BASE_URL=https://your-api-domain.com
 
 # For development (default)
 flutter run --dart-define=API_BASE_URL=http://localhost:8080
+```
+
+Additional optional integration hooks:
+
+```bash
+# Flutter placeholders
+flutter run --dart-define=RAZORPAY_KEY_ID=rzp_test_xxx
+
+# Server placeholders
+dart run --define=RAZORPAY_KEY_ID=rzp_test_xxx \
+  --define=RAZORPAY_KEY_SECRET=secret \
+  --define=OTP_PROVIDER=firebase \
+  --define=SMS_PROVIDER=msg91 \
+  server/server.dart
 ```
 
 ## Key Fixes & Improvements
