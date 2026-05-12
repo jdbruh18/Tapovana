@@ -29,7 +29,7 @@ class PropertyHandler {
         request,
         status: HttpStatus.notFound,
         code: 'property_not_found',
-        message: 'Property with id $id was not found',
+        message: 'Property was not found',
       );
       return;
     }
@@ -43,7 +43,7 @@ class PropertyHandler {
         request,
         status: HttpStatus.notFound,
         code: 'property_not_found',
-        message: 'Property with id $id was not found',
+        message: 'Property was not found',
       );
       return;
     }

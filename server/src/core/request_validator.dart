@@ -19,7 +19,8 @@ class RequestValidator {
     dynamic decoded;
     try {
       decoded = jsonDecode(rawBody);
-    } catch (_) {
+    } catch (error) {
+      stderr.writeln('Invalid JSON payload: $error');
       throw RequestValidationException('invalid_json', 'Request body must be valid JSON');
     }
 

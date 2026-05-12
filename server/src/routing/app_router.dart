@@ -79,7 +79,8 @@ class AppRouter {
         code: error.code,
         message: error.message,
       );
-    } catch (_) {
+    } catch (error) {
+      stderr.writeln('Unhandled route error on ${request.method} $path: $error');
       await JsonResponse.error(
         request,
         status: HttpStatus.internalServerError,

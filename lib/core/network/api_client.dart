@@ -60,9 +60,7 @@ class ApiClient {
   }
 
   ApiException _mapHttpError(int statusCode, dynamic body) {
-    final messageFromBody = body is Map<String, dynamic>
-        ? (body['message'] as String? ?? body['error'] as String?)
-        : null;
+    final messageFromBody = _extractMessage(body);
 
     switch (statusCode) {
       case 400:
@@ -78,5 +76,12 @@ class ApiClient {
       default:
         return ApiException(messageFromBody ?? 'Server error', statusCode: statusCode, code: 'server_error');
     }
+  }
+
+  String? _extractMessage(dynamic body) {
+    if (body is! Map<String, dynamic>) {
+      return null;
+    }
+    return body['message'] as String? ?? body['error'] as String?;
   }
 }

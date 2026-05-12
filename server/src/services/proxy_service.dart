@@ -46,17 +46,19 @@ class ProxyService {
         );
       }
 
-      final bytes = await externalResponse.fold<List<int>>([], (acc, chunk) {
-        acc.addAll(chunk);
-        return acc;
-      });
+      final bytesBuilder = BytesBuilder(copy: false);
+      await for (final chunk in externalResponse) {
+        bytesBuilder.add(chunk);
+      }
+      final bytes = bytesBuilder.toBytes();
 
       return ProxyResult(
         statusCode: HttpStatus.ok,
         bytes: bytes,
         contentType: externalResponse.headers.contentType ?? ContentType.binary,
       );
-    } catch (_) {
+    } catch (error) {
+      stderr.writeln('Proxy fetch failed: $error');
       return ProxyResult(
         statusCode: HttpStatus.internalServerError,
         errorCode: 'proxy_failed',

@@ -48,7 +48,8 @@ class _SplashScreenState extends State<SplashScreen> {
       if (mounted) {
         setState(() => _hasError = true);
       }
-    } catch (_) {
+    } catch (error) {
+      debugPrint('Unexpected property load error: $error');
       if (mounted) {
         setState(() => _hasError = true);
       }
@@ -888,7 +889,7 @@ class Property {
   final Map<String, double> prices;
   final List<String> nextStarts;
 
-  Property({required this.id, required this.name, required this.imageAsset, required this.rating, required this.distanceKm, required this.verified, required this.prices, required this.nextStarts});
+  const Property({required this.id, required this.name, required this.imageAsset, required this.rating, required this.distanceKm, required this.verified, required this.prices, required this.nextStarts});
 
   factory Property.fromJson(Map<String, dynamic> j) => Property(
         id: (j['id'] as String?) ?? (j['name'] as String?) ?? 'unknown',
@@ -926,7 +927,7 @@ class Property {
 
 List<Property> remoteProperties = [];
 
-final mockProperties = <Property>[
+const mockProperties = <Property>[
   Property(
     id: 'p1',
     name: 'Homestay Thachi',
@@ -934,7 +935,7 @@ final mockProperties = <Property>[
     rating: 4.6,
     distanceKm: 0.8,
     verified: true,
-    prices: {'30m': 99, '1h': 149, '2h': 249, '3h': 329, '4h': 389},
+    prices: {'30m': 99.0, '1h': 149.0, '2h': 249.0, '3h': 329.0, '4h': 389.0},
     nextStarts: const ['11:00', '11:30', '12:00', '12:30'],
   ),
   Property(
@@ -944,7 +945,7 @@ final mockProperties = <Property>[
     rating: 4.4,
     distanceKm: 1.2,
     verified: true,
-    prices: {'30m': 89, '1h': 139, '2h': 229, '3h': 309, '4h': 369},
+    prices: {'30m': 89.0, '1h': 139.0, '2h': 229.0, '3h': 309.0, '4h': 369.0},
     nextStarts: const ['10:30', '11:00', '11:30'],
   ),
   Property(
@@ -954,7 +955,7 @@ final mockProperties = <Property>[
     rating: 4.5,
     distanceKm: 2.7,
     verified: false,
-    prices: {'30m': 79, '1h': 129, '2h': 219, '3h': 289, '4h': 349},
+    prices: {'30m': 79.0, '1h': 129.0, '2h': 219.0, '3h': 289.0, '4h': 349.0},
     nextStarts: const ['12:00', '12:30', '13:00'],
   ),
 ];

@@ -55,40 +55,35 @@ class FilePropertyRepository implements PropertyRepository {
 
   @override
   Future<bool> update(String id, Map<String, dynamic> property) async {
-    var updated = false;
-    await _update((list) {
+    return _update((list) {
       final index = list.indexWhere((entry) => entry['id'] == id);
       if (index == -1) {
         return false;
       }
       list[index] = property;
-      updated = true;
       return true;
     });
-    return updated;
   }
 
   @override
   Future<bool> remove(String id) async {
-    var removed = false;
-    await _update((list) {
+    return _update((list) {
       final initialLength = list.length;
       list.removeWhere((entry) => entry['id'] == id);
-      removed = list.length != initialLength;
-      return true;
+      return list.length != initialLength;
     });
-    return removed;
   }
 
-  Future<void> _update(bool Function(List<Map<String, dynamic>> list) updater) async {
+  Future<bool> _update(bool Function(List<Map<String, dynamic>> list) updater) async {
     final current = List<Map<String, dynamic>>.from(await getAll());
-    final shouldPersist = updater(current);
-    if (!shouldPersist) {
-      return;
+    final didUpdate = updater(current);
+    if (!didUpdate) {
+      return false;
     }
 
     await _dbFile.writeAsString(jsonEncode(current));
     _cache = current;
     _cacheUpdatedAt = DateTime.now();
+    return true;
   }
 }
