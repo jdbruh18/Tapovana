@@ -82,7 +82,7 @@ class MockOtpProvider implements OtpProvider {
 enum NotificationChannel { sms, whatsapp }
 
 abstract class NotificationProvider {
-  Future<void> notify({
+  Future<void> send({
     required NotificationChannel channel,
     required String recipient,
     required String message,
@@ -91,7 +91,7 @@ abstract class NotificationProvider {
 
 class NoopNotificationProvider implements NotificationProvider {
   @override
-  Future<void> notify({
+  Future<void> send({
     required NotificationChannel channel,
     required String recipient,
     required String message,
